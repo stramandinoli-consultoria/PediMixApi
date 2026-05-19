@@ -1,25 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using MySqlConnector;
+using System.Text.RegularExpressions;
 
-namespace PediMix.Infrastructure.Data;
+namespace PediMix.API.Services;
 
-public class PediMixDbContextFactory : IDesignTimeDbContextFactory<PediMixDbContext>
+public static class RailwayConnectionStringResolver
 {
-    public PediMixDbContext CreateDbContext(string[] args)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<PediMixDbContext>();
-
-        var connectionString = ResolveConnectionString();
-
-        EnsureDatabaseExists(connectionString);
-
-        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-
-        return new PediMixDbContext(optionsBuilder.Options);
-    }
-
-    private static string ResolveConnectionString()
+    public static string Resolve(IConfiguration configuration)
     {
         var url = FirstNonEmpty(
             Environment.GetEnvironmentVariable("MYSQL_URL"),
@@ -34,13 +19,12 @@ public class PediMixDbContextFactory : IDesignTimeDbContextFactory<PediMixDbCont
 
         var host = FirstNonEmpty(
             Environment.GetEnvironmentVariable("MYSQLHOST"),
-            Environment.GetEnvironmentVariable("MYSQL_HOST"),
-            "mainline.proxy.rlwy.net");
+            Environment.GetEnvironmentVariable("MYSQL_HOST"));
 
         var port = FirstNonEmpty(
             Environment.GetEnvironmentVariable("MYSQLPORT"),
             Environment.GetEnvironmentVariable("MYSQL_PORT"),
-            "49986");
+            "3306");
 
         var database = FirstNonEmpty(
             Environment.GetEnvironmentVariable("MYSQLDATABASE"),
@@ -64,32 +48,13 @@ public class PediMixDbContextFactory : IDesignTimeDbContextFactory<PediMixDbCont
             Environment.GetEnvironmentVariable("SENHA_DO__MYSQL"),
             Environment.GetEnvironmentVariable("SENHA_ROOT_DO_MYSQL"));
 
-        if (!string.IsNullOrWhiteSpace(password))
+        if (!string.IsNullOrWhiteSpace(host) && !string.IsNullOrWhiteSpace(password))
         {
             return $"Server={host};Port={port};Database={database};User={user};Password={password};SslMode=Required;";
         }
 
-        return "Server=mainline.proxy.rlwy.net;Port=49986;Database=pedmix_db;User=root;Password=jYFqsjMdBZJGWfEMrukyftRgcEYazGKq;SslMode=Required;";
-    }
-
-    private static void EnsureDatabaseExists(string connectionString)
-    {
-        var builder = new MySqlConnectionStringBuilder(connectionString);
-        var databaseName = builder.Database;
-
-        if (string.IsNullOrWhiteSpace(databaseName))
-        {
-            return;
-        }
-
-        builder.Database = "mysql";
-
-        using var connection = new MySqlConnection(builder.ConnectionString);
-        connection.Open();
-
-        using var command = connection.CreateCommand();
-        command.CommandText = $"CREATE DATABASE IF NOT EXISTS `{databaseName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
-        command.ExecuteNonQuery();
+        return configuration.GetConnectionString("DefaultConnection")
+               ?? throw new InvalidOperationException("Connection string not configured.");
     }
 
     private static string FirstNonEmpty(params string?[] values)
@@ -100,17 +65,28 @@ public class PediMixDbContextFactory : IDesignTimeDbContextFactory<PediMixDbCont
     private static string ToEfConnectionString(string rawUrl)
     {
         var sanitized = rawUrl.Trim();
+
         if (!sanitized.StartsWith("mysql://", StringComparison.OrdinalIgnoreCase))
         {
             return sanitized;
         }
 
-        var uri = new Uri(sanitized);
-        var userInfo = uri.UserInfo.Split(':', 2);
-        var user = Uri.UnescapeDataString(userInfo[0]);
-        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
-        var database = uri.AbsolutePath.Trim('/');
+        var match = Regex.Match(
+            sanitized,
+            "^mysql://(?<user>[^:]+):(?<pwd>[^@]+)@(?<host>[^:/]+):(?<port>\\d+)/(?<db>[^?]+)",
+            RegexOptions.IgnoreCase);
 
-        return $"Server={uri.Host};Port={uri.Port};Database={database};User={user};Password={password};SslMode=Required;";
+        if (!match.Success)
+        {
+            throw new InvalidOperationException("Invalid MYSQL url format.");
+        }
+
+        var user = Uri.UnescapeDataString(match.Groups["user"].Value);
+        var pwd = Uri.UnescapeDataString(match.Groups["pwd"].Value);
+        var host = match.Groups["host"].Value;
+        var port = match.Groups["port"].Value;
+        var db = match.Groups["db"].Value;
+
+        return $"Server={host};Port={port};Database={db};User={user};Password={pwd};SslMode=Required;";
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PediMix.Infrastructure.Data;
 
@@ -10,9 +11,10 @@ using PediMix.Infrastructure.Data;
 namespace PediMix.Infrastructure.Migrations
 {
     [DbContext(typeof(PediMixDbContext))]
-    partial class PediMixDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260427191655_AddContactFieldsToUser")]
+    partial class AddContactFieldsToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,86 +148,20 @@ namespace PediMix.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Account")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("AccountType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Agency")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("BankCode")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("BankName")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("BringsBand")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Cnh")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Cpf")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DemoVideoUrl")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
 
-                    b.Property<string>("DocumentBackUrl")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("DocumentFrontUrl")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FacebookUrl")
-                        .HasColumnType("longtext");
-
                     b.Property<int>("Followers")
                         .HasColumnType("int");
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Genre")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("HasOwnLighting")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("HasOwnSoundSystem")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("HolderDocument")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("HolderName")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("InstagramUrl")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
-
-                    b.Property<string>("InstrumentsJson")
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -233,47 +169,8 @@ namespace PediMix.Infrastructure.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("MusiciansCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PixKey")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PixKeyType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PortfolioHighlights")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PortfolioLinksJson")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PortfolioSummary")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PressKitUrl")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ProfilePhotoUrl")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ProofAddressUrl")
-                        .HasColumnType("longtext");
-
                     b.Property<decimal>("Rating")
                         .HasColumnType("decimal(3,2)");
-
-                    b.Property<string>("RepertoireDocUrl")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Rg")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("SetupTimeMinutes")
-                        .HasColumnType("int");
 
                     b.Property<string>("SoundcloudUrl")
                         .HasMaxLength(500)
@@ -288,12 +185,6 @@ namespace PediMix.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("State")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TechnicalRider")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("TiktokUrl")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
@@ -301,17 +192,11 @@ namespace PediMix.Infrastructure.Migrations
                     b.Property<int>("TotalEvents")
                         .HasColumnType("int");
 
-                    b.Property<string>("TransportInfo")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("WebsiteUrl")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("YoutubeUrl")
                         .HasMaxLength(500)
@@ -1052,25 +937,11 @@ namespace PediMix.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("GalleryJson")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("MenuDocumentName")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("MenuDocumentUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<string>("MenuItemsJson")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -19,6 +19,57 @@ public class ArtistProfile : BaseEntity
     public string? SoundcloudUrl { get; set; }
     public string? TiktokUrl { get; set; }
 
+    // Complete profile - basic info
+    public string? FullName { get; set; }
+    public DateTime? BirthDate { get; set; }
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
+    public string? Genre { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+
+    // Complete profile - documents
+    public string? Cpf { get; set; }
+    public string? Rg { get; set; }
+    public string? Cnh { get; set; }
+    public string? ProofAddressUrl { get; set; }
+    public string? ProfilePhotoUrl { get; set; }
+    public string? DocumentFrontUrl { get; set; }
+    public string? DocumentBackUrl { get; set; }
+
+    // Complete profile - bank data
+    public string? BankName { get; set; }
+    public string? BankCode { get; set; }
+    public string? Agency { get; set; }
+    public string? Account { get; set; }
+    public string? AccountType { get; set; }
+    public string? HolderName { get; set; }
+    public string? HolderDocument { get; set; }
+    public string? PixKeyType { get; set; }
+    public string? PixKey { get; set; }
+
+    // Complete profile - social links
+    public string? FacebookUrl { get; set; }
+    public string? WebsiteUrl { get; set; }
+
+    // Complete profile - portfolio
+    public string? PortfolioSummary { get; set; }
+    public string? PortfolioHighlights { get; set; }
+    public string? PortfolioLinksJson { get; set; }
+    public string? PressKitUrl { get; set; }
+    public string? DemoVideoUrl { get; set; }
+    public string? RepertoireDocUrl { get; set; }
+
+    // Complete profile - equipment
+    public bool HasOwnSoundSystem { get; set; }
+    public bool HasOwnLighting { get; set; }
+    public bool BringsBand { get; set; }
+    public int MusiciansCount { get; set; }
+    public string? InstrumentsJson { get; set; }
+    public string? TechnicalRider { get; set; }
+    public string? TransportInfo { get; set; }
+    public int SetupTimeMinutes { get; set; }
+
     // Navigation properties
     public virtual User User { get; set; } = null!;
     public virtual ICollection<ArtistGenre> ArtistGenres { get; set; } = new List<ArtistGenre>();

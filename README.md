@@ -1,8 +1,8 @@
 # 🎵 PediMix API
 
-**API .NET Core 8 com Arquitetura CQRS para Sistema de Gerenciamento de Eventos Musicais**
+**API .NET 6.0 com Arquitetura CQRS para Sistema de Gerenciamento de Eventos Musicais**
 
-[![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-6.0-blue.svg)](https://dotnet.microsoft.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://www.mysql.com/)
 [![Railway](https://img.shields.io/badge/Railway-Database-purple.svg)](https://railway.app/)
 [![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-green.svg)](https://swagger.io/)
