@@ -11,7 +11,11 @@ public class UserDto
     public string LastName { get; set; } = string.Empty;
     public string? Avatar { get; set; }
     public string? Bio { get; set; }
+    public string? Cpf { get; set; }
     public string? PhoneNumber { get; set; }
+    public string? Whatsapp { get; set; }
+    public string? EmergencyContact { get; set; }
+    public string? EmergencyPhone { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public Gender? Gender { get; set; }
     public UserRole Role { get; set; }
@@ -51,6 +55,11 @@ public class CompleteProfileDto
     public DateTime? BirthDate { get; set; }
     public Gender? Gender { get; set; }
     public AddressDto? Address { get; set; }
+    public ContactDto? Contact { get; set; }
+}
+
+public class ContactDto
+{
     public string? Phone { get; set; }
     public string? Whatsapp { get; set; }
     public string? EmergencyContact { get; set; }
@@ -65,7 +74,7 @@ public class AddressDto
     public string Neighborhood { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public string State { get; set; } = string.Empty;
-    public string ZipCode { get; set; } = string.Empty;
+    public string Cep { get; set; } = string.Empty;
     public string Country { get; set; } = "Brasil";
 }
 

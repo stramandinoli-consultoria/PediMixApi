@@ -24,6 +24,7 @@ public interface IUserRepository : IGenericRepository<User>
 public interface IArtistProfileRepository : IGenericRepository<ArtistProfile>
 {
     Task<ArtistProfile?> GetByUserIdAsync(Guid userId);
+    Task<ArtistProfile?> GetByEmailAsync(string email);
     Task<ArtistProfile?> GetWithRepertoiresAsync(Guid id);
     Task<IEnumerable<ArtistProfile>> GetByGenreAsync(Guid genreId);
     Task<IEnumerable<ArtistProfile>> SearchAsync(string query);
@@ -77,9 +78,14 @@ public interface IGenreRepository : IGenericRepository<Genre>
     Task<IEnumerable<Genre>> GetMostUsedAsync(int count = 10);
 }
 
+public interface IAddressRepository : IGenericRepository<PediMix.Domain.Entities.Address>
+{
+}
+
 public interface IUnitOfWork : IDisposable
 {
     IUserRepository Users { get; }
+    IAddressRepository Addresses { get; }
     IArtistProfileRepository ArtistProfiles { get; }
     IVenueProfileRepository VenueProfiles { get; }
     ISongRepository Songs { get; }

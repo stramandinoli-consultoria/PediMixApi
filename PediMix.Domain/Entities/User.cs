@@ -13,6 +13,10 @@ public class User : BaseEntity
     public string? Avatar { get; set; }
     public string? Bio { get; set; }
     public string? PhoneNumber { get; set; }
+    public string? Whatsapp { get; set; }
+    public string? Cpf { get; set; }
+    public string? EmergencyContact { get; set; }
+    public string? EmergencyPhone { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public Gender? Gender { get; set; }
     public UserRole Role { get; set; } = UserRole.Audience;
