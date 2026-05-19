@@ -19,6 +19,12 @@ public class VenueProfile : BaseEntity
     public string? Email { get; set; }
     public string? Website { get; set; }
 
+    // Menu and gallery
+    public string? MenuItemsJson { get; set; }
+    public string? MenuDocumentUrl { get; set; }
+    public string? MenuDocumentName { get; set; }
+    public string? GalleryJson { get; set; }
+
     // Navigation properties
     public virtual User User { get; set; } = null!;
     public virtual VenueAddress? VenueAddress { get; set; }

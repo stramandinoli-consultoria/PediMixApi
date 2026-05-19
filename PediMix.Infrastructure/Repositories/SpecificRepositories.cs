@@ -19,6 +19,12 @@ public class ArtistProfileRepository : GenericRepository<ArtistProfile>, IArtist
             .FirstOrDefaultAsync(ap => ap.UserId == userId);
     }
 
+    public async Task<ArtistProfile?> GetByEmailAsync(string email)
+    {
+        var normalized = email.Trim().ToLower();
+        return await _dbSet.FirstOrDefaultAsync(ap => ap.Email != null && ap.Email.ToLower() == normalized);
+    }
+
     public async Task<ArtistProfile?> GetWithRepertoiresAsync(Guid id)
     {
         return await _dbSet
@@ -135,6 +141,11 @@ public class GenreRepository : GenericRepository<Genre>, IGenreRepository
     }
 }
 
+public class AddressRepository : GenericRepository<Address>, IAddressRepository
+{
+    public AddressRepository(PediMixDbContext context) : base(context) { }
+}
+
 public class UnitOfWork : IUnitOfWork
 {
     private readonly PediMixDbContext _context;
@@ -144,6 +155,7 @@ public class UnitOfWork : IUnitOfWork
     {
         _context = context;
         Users = new UserRepository(_context);
+        Addresses = new AddressRepository(_context);
         ArtistProfiles = new ArtistProfileRepository(_context);
         VenueProfiles = new VenueProfileRepository(_context);
         Songs = new SongRepository(_context);
@@ -154,6 +166,7 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public IUserRepository Users { get; }
+    public IAddressRepository Addresses { get; }
     public IArtistProfileRepository ArtistProfiles { get; }
     public IVenueProfileRepository VenueProfiles { get; }
     public ISongRepository Songs { get; }

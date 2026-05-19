@@ -85,6 +85,73 @@ public class ArtistProfileConfiguration : IEntityTypeConfiguration<ArtistProfile
         
         builder.Property(ap => ap.TiktokUrl)
             .HasMaxLength(500);
+
+        builder.Property(ap => ap.FullName)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Phone)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Email)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Genre)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.City)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.State)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Cpf)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Rg)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Cnh)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.ProofAddressUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.ProfilePhotoUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.DocumentFrontUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.DocumentBackUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.BankName)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.BankCode)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Agency)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.Account)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.AccountType)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.HolderName)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.HolderDocument)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.PixKeyType)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.PixKey)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.FacebookUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.WebsiteUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.PortfolioSummary)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.PortfolioHighlights)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.PortfolioLinksJson)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.PressKitUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.DemoVideoUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.RepertoireDocUrl)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.InstrumentsJson)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.TechnicalRider)
+            .HasColumnType("longtext");
+        builder.Property(ap => ap.TransportInfo)
+            .HasColumnType("longtext");
     }
 }
 
@@ -112,6 +179,15 @@ public class VenueProfileConfiguration : IEntityTypeConfiguration<VenueProfile>
         
         builder.Property(vp => vp.Website)
             .HasMaxLength(500);
+
+        builder.Property(vp => vp.MenuItemsJson)
+            .HasColumnType("longtext");
+        builder.Property(vp => vp.MenuDocumentUrl)
+            .HasMaxLength(500);
+        builder.Property(vp => vp.MenuDocumentName)
+            .HasMaxLength(255);
+        builder.Property(vp => vp.GalleryJson)
+            .HasColumnType("longtext");
 
         // Relationship with VenueAddress
         builder.HasOne(vp => vp.VenueAddress)
