@@ -57,6 +57,59 @@ public static class RailwayConnectionStringResolver
                ?? throw new InvalidOperationException("Connection string not configured.");
     }
 
+    public static string? ResolveRedis(IConfiguration configuration)
+    {
+        // Prioridade: URL interna -> URL pública -> connection string direta.
+        var redisUrl = FirstNonEmpty(
+            Environment.GetEnvironmentVariable("REDIS_URL"),
+            Environment.GetEnvironmentVariable("REDIS_PUBLIC_URL"),
+            Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING"),
+            configuration["Redis:ConnectionString"]);
+
+        if (!string.IsNullOrWhiteSpace(redisUrl))
+        {
+            return ToRedisConfiguration(redisUrl);
+        }
+
+        var host = FirstNonEmpty(
+            Environment.GetEnvironmentVariable("REDISHOST"),
+            Environment.GetEnvironmentVariable("REDIS_HOST"));
+
+        var port = FirstNonEmpty(
+            Environment.GetEnvironmentVariable("REDISPORT"),
+            Environment.GetEnvironmentVariable("REDIS_PORT"),
+            "6379");
+
+        var user = FirstNonEmpty(
+            Environment.GetEnvironmentVariable("REDISUSER"),
+            Environment.GetEnvironmentVariable("REDIS_USER"),
+            "default");
+
+        var password = FirstNonEmpty(
+            Environment.GetEnvironmentVariable("REDISPASSWORD"),
+            Environment.GetEnvironmentVariable("REDIS_PASSWORD"),
+            Environment.GetEnvironmentVariable("REDIS_PASS"));
+
+        if (string.IsNullOrWhiteSpace(host))
+        {
+            return null;
+        }
+
+        var parts = new List<string>
+        {
+            $"{host}:{port}",
+            "abortConnect=false"
+        };
+
+        if (!string.IsNullOrWhiteSpace(user))
+            parts.Add($"user={user}");
+
+        if (!string.IsNullOrWhiteSpace(password))
+            parts.Add($"password={password}");
+
+        return string.Join(",", parts);
+    }
+
     private static string FirstNonEmpty(params string?[] values)
     {
         return values.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v)) ?? string.Empty;
@@ -88,5 +141,40 @@ public static class RailwayConnectionStringResolver
         var db = match.Groups["db"].Value;
 
         return $"Server={host};Port={port};Database={db};User={user};Password={pwd};SslMode=Required;";
+    }
+
+    private static string ToRedisConfiguration(string rawValue)
+    {
+        var sanitized = rawValue.Trim();
+
+        if (sanitized.StartsWith("redis://", StringComparison.OrdinalIgnoreCase)
+            || sanitized.StartsWith("rediss://", StringComparison.OrdinalIgnoreCase))
+        {
+            var uri = new Uri(sanitized);
+            var isSsl = uri.Scheme.Equals("rediss", StringComparison.OrdinalIgnoreCase);
+
+            var userInfo = uri.UserInfo.Split(':', 2);
+            var user = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : string.Empty;
+            var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
+
+            var parts = new List<string>
+            {
+                $"{uri.Host}:{uri.Port}",
+                "abortConnect=false"
+            };
+
+            if (!string.IsNullOrWhiteSpace(user))
+                parts.Add($"user={user}");
+
+            if (!string.IsNullOrWhiteSpace(password))
+                parts.Add($"password={password}");
+
+            if (isSsl)
+                parts.Add("ssl=true");
+
+            return string.Join(",", parts);
+        }
+
+        return sanitized;
     }
 }

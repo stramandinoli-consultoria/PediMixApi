@@ -41,6 +41,11 @@ public class PediMixDbContext : DbContext
     public DbSet<Amenity> Amenities { get; set; }
     public DbSet<VenueAmenity> VenueAmenities { get; set; }
 
+    // Music integrations (Spotify, Lyrically, Vagalume, YouTube)
+    public DbSet<SongExternalData> SongExternalData { get; set; }
+    public DbSet<SongLyrics> SongLyrics { get; set; }
+    public DbSet<ExternalArtist> ExternalArtists { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -54,6 +59,9 @@ public class PediMixDbContext : DbContext
         modelBuilder.ApplyConfiguration(new EventConfiguration());
         modelBuilder.ApplyConfiguration(new SongRequestConfiguration());
         modelBuilder.ApplyConfiguration(new GenreConfiguration());
+        modelBuilder.ApplyConfiguration(new SongExternalDataConfiguration());
+        modelBuilder.ApplyConfiguration(new SongLyricsConfiguration());
+        modelBuilder.ApplyConfiguration(new ExternalArtistConfiguration());
 
         // Configure many-to-many relationships
         ConfigureManyToManyRelationships(modelBuilder);

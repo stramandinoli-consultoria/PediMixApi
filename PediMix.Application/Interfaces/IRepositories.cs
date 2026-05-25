@@ -82,6 +82,27 @@ public interface IAddressRepository : IGenericRepository<PediMix.Domain.Entities
 {
 }
 
+// ============================================================
+// Music integrations (Spotify, Lyrically, Vagalume)
+// ============================================================
+public interface ISongExternalDataRepository : IGenericRepository<SongExternalData>
+{
+    Task<SongExternalData?> GetBySongIdAsync(Guid songId);
+    Task<SongExternalData?> GetBySpotifyIdAsync(string spotifyId);
+}
+
+public interface ISongLyricsRepository : IGenericRepository<SongLyrics>
+{
+    Task<SongLyrics?> GetBySongIdAsync(Guid songId);
+    Task<IEnumerable<SongLyrics>> GetAllBySongIdAsync(Guid songId);
+}
+
+public interface IExternalArtistRepository : IGenericRepository<ExternalArtist>
+{
+    Task<ExternalArtist?> GetBySpotifyIdAsync(string spotifyId);
+    Task<IEnumerable<ExternalArtist>> SearchByNameAsync(string query, int limit = 10);
+}
+
 public interface IUnitOfWork : IDisposable
 {
     IUserRepository Users { get; }
@@ -93,7 +114,12 @@ public interface IUnitOfWork : IDisposable
     IEventRepository Events { get; }
     ISongRequestRepository SongRequests { get; }
     IGenreRepository Genres { get; }
-    
+
+    // Music integrations
+    ISongExternalDataRepository SongExternalData { get; }
+    ISongLyricsRepository SongLyrics { get; }
+    IExternalArtistRepository ExternalArtists { get; }
+
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();
     Task CommitTransactionAsync();

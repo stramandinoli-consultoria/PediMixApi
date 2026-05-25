@@ -114,13 +114,15 @@ public class CreateSongCommandHandler : IRequestHandler<CreateSongCommand, SongD
 
     public async Task<SongDto> Handle(CreateSongCommand request, CancellationToken cancellationToken)
     {
+        var genreId = await ResolveGenreIdAsync(request.GenreId);
+
         var song = new Song
         {
             Id = Guid.NewGuid(),
             Title = request.Title,
             Artist = request.Artist,
             Duration = request.Duration?.ToString() ?? "00:00",
-            GenreId = request.GenreId,
+            GenreId = genreId,
             Key = request.Key,
             Year = request.Year ?? DateTime.UtcNow.Year,
             CreatedAt = DateTime.UtcNow,
@@ -131,6 +133,38 @@ public class CreateSongCommandHandler : IRequestHandler<CreateSongCommand, SongD
         await _unitOfWork.SaveChangesAsync();
 
         return _mapper.Map<SongDto>(song);
+    }
+
+    private async Task<Guid> ResolveGenreIdAsync(Guid requestedGenreId)
+    {
+        if (requestedGenreId != Guid.Empty && await _unitOfWork.Genres.ExistsAsync(requestedGenreId))
+        {
+            return requestedGenreId;
+        }
+
+        var fallbackGenre = await _unitOfWork.Genres.GetByNameAsync("Outros")
+            ?? await _unitOfWork.Genres.GetByNameAsync("Pop")
+            ?? await _unitOfWork.Genres.GetByNameAsync("Sertanejo");
+
+        if (fallbackGenre != null)
+        {
+            return fallbackGenre.Id;
+        }
+
+        var createdFallbackGenre = new Genre
+        {
+            Id = Guid.NewGuid(),
+            Name = "Outros",
+            Color = "#6B7280",
+            Description = "Gênero padrão para músicas sem classificação.",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        await _unitOfWork.Genres.AddAsync(createdFallbackGenre);
+        await _unitOfWork.SaveChangesAsync();
+
+        return createdFallbackGenre.Id;
     }
 }
 
