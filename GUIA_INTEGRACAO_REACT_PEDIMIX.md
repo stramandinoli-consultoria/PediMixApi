@@ -438,6 +438,92 @@ Eventos esperados:
 7. Revisar guardas de rota por perfil (AUDIENCE, SINGER, VENUE, ADMIN).
 8. Validar expiracao de sessao de 2h com logout automatico.
 
+## 13) Endpoints adicionais que faltavam no guia
+
+Abaixo estao os metodos implementados na API que nao estavam listados explicitamente nas secoes anteriores.
+
+### 13.1 Auth adicionais
+
+- `POST /api/v1/auth/forgot-password`
+- `POST /api/v1/auth/reset-password`
+- `POST /api/v1/auth/verify-email`
+- `POST /api/v1/auth/resend-verification`
+
+### 13.2 Users adicionais
+
+- `GET /api/v1/users/{id:guid}`
+- `GET /api/v1/users/{id:guid}/stats`
+- `POST /api/v1/users/me/avatar`
+- `DELETE /api/v1/users/me/avatar`
+- `PUT /api/v1/users/me/address`
+- `GET /api/v1/users/me/location`
+- `GET /api/v1/users/me/preferences`
+- `PUT /api/v1/users/me/preferences`
+
+### 13.3 Artists adicionais
+
+- `GET /api/v1/artists/{id:guid}/ratings`
+- `POST /api/v1/artists/{id:guid}/follow`
+- `DELETE /api/v1/artists/{id:guid}/follow`
+- `GET /api/v1/artists/me/complete-profile`
+- `PUT /api/v1/artists/me/complete-profile`
+- `GET /api/v1/artists/{id:guid}/reviews`
+- `POST /api/v1/artists/{id:guid}/reviews`
+
+### 13.4 Venues adicionais
+
+- `GET /api/v1/venues/{id:guid}/artists`
+- `GET /api/v1/venues/nearby?lat=...&lng=...&radius=...`
+
+### 13.5 Events adicionais
+
+- `GET /api/v1/events/today/live`
+- `POST /api/v1/events/{id:guid}/like`
+- `DELETE /api/v1/events/{id:guid}/like`
+- `POST /api/v1/events/{id:guid}/share`
+- `GET /api/v1/events/{id:guid}/reviews`
+- `POST /api/v1/events/{id:guid}/reviews`
+
+### 13.6 Repertoires adicionais
+
+- `PATCH /api/v1/repertoires/{id:guid}/activate`
+- `PATCH /api/v1/repertoires/{id:guid}/deactivate`
+- `PATCH /api/v1/repertoires/{id:guid}/songs/reorder`
+
+### 13.7 Song Requests adicionais
+
+- `GET /api/v1/song-requests/me`
+- `PATCH /api/v1/song-requests/{id:guid}/finish`
+- `POST /api/v1/song-requests/{id:guid}/vote`
+- `DELETE /api/v1/song-requests/{id:guid}/vote`
+
+### 13.8 Uploads e Notifications
+
+- `POST /api/v1/uploads/image`
+- `POST /api/v1/uploads/audio`
+- `DELETE /api/v1/uploads/{fileId}`
+- `GET /api/v1/notifications/me`
+- `PATCH /api/v1/notifications/{id:guid}/read`
+- `PATCH /api/v1/notifications/read-all`
+
+### 13.9 Endpoints legados que coexistem com v1
+
+- `GET /api/users/{id}`
+- `GET /api/users/email/{email}`
+- `POST /api/users`
+- `PUT /api/users/{id}`
+- `GET /api/songs/genre/{genreId}`
+- `GET /api/songs/search?query=...`
+- `POST /api/songs`
+- `GET /api/events/{id}`
+- `GET /api/events/upcoming?count=10`
+- `GET /api/events/date-range?startDate=...&endDate=...`
+- `POST /api/events`
+- `GET /api/songrequests/event/{eventId}?pendingOnly=false`
+- `POST /api/songrequests`
+- `GET /api/repertoires/{id}/songs`
+- `GET /api/repertoires/artist/{artistProfileId}?activeOnly=false`
+
 ---
 
 Se quiser, no proximo passo eu posso gerar os arquivos base de `src/api`, `src/services` e `src/hooks` ja prontos para colar no seu frontend.

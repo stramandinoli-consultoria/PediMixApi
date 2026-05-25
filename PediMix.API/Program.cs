@@ -6,6 +6,8 @@ using System.Text.Json;
 using PediMix.Infrastructure.Data;
 using PediMix.Application.Interfaces;
 using PediMix.Infrastructure.Repositories;
+using PediMix.Infrastructure.Services;
+using PediMix.Infrastructure.Policies;
 using MediatR;
 using PediMix.Application.Handlers.CommandHandlers;
 using PediMix.Application.Handlers.QueryHandlers;
@@ -104,6 +106,64 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 // External Services
 builder.Services.AddHttpClient<IViaCepService, ViaCepService>();
+
+// ============================================================
+// MUSIC INTEGRATIONS (Spotify, Lyrically, Vagalume, YouTube)
+// ============================================================
+
+// Cache em memória (sempre disponível — fallback do Redis)
+builder.Services.AddMemoryCache();
+
+// Redis (opcional — só registra IDistributedCache se houver connection string)
+var redisConnection = RailwayConnectionStringResolver.ResolveRedis(builder.Configuration);
+
+if (!string.IsNullOrWhiteSpace(redisConnection))
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConnection;
+        options.InstanceName = "pedimix:";
+    });
+    Console.WriteLine("[Startup] Redis configurado.");
+}
+else
+{
+    Console.WriteLine("[Startup] Redis NÃO configurado — MusicCacheService usará IMemoryCache.");
+}
+
+// MusicCacheService: tenta Redis -> cai em IMemoryCache se indisponível.
+// Usamos factory para resolver IDistributedCache de forma OPCIONAL — se Redis
+// não foi registrado acima, GetService<IDistributedCache>() devolve null e o
+// MusicCacheService passa a operar 100% em memória.
+builder.Services.AddSingleton<IMusicCacheService>(sp =>
+{
+    var memory = sp.GetRequiredService<Microsoft.Extensions.Caching.Memory.IMemoryCache>();
+    var logger = sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<MusicCacheService>>();
+    var redis = sp.GetService<Microsoft.Extensions.Caching.Distributed.IDistributedCache>();
+    return new MusicCacheService(memory, logger, redis);
+});
+
+// HttpClients tipados com Polly (Retry + CircuitBreaker)
+builder.Services.AddHttpClient<ISpotifyService, SpotifyService>(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(15);
+    })
+    .AddPolicyHandler(HttpPolicies.RetryPolicy())
+    .AddPolicyHandler(HttpPolicies.CircuitBreakerPolicy());
+
+builder.Services.AddHttpClient<ILyricsService, LyricsService>(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(15);
+    })
+    .AddPolicyHandler(HttpPolicies.RetryPolicy())
+    .AddPolicyHandler(HttpPolicies.CircuitBreakerPolicy());
+
+builder.Services.AddHttpClient<IYouTubeService, YouTubeService>(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(15);
+    })
+    .AddPolicyHandler(HttpPolicies.RetryPolicy())
+    .AddPolicyHandler(HttpPolicies.CircuitBreakerPolicy());
 
 // CORS
 builder.Services.AddCors(options =>

@@ -163,6 +163,11 @@ public class UnitOfWork : IUnitOfWork
         Events = new EventRepository(_context);
         SongRequests = new SongRequestRepository(_context);
         Genres = new GenreRepository(_context);
+
+        // Music integrations
+        SongExternalData = new SongExternalDataRepository(_context);
+        SongLyrics = new SongLyricsRepository(_context);
+        ExternalArtists = new ExternalArtistRepository(_context);
     }
 
     public IUserRepository Users { get; }
@@ -174,6 +179,11 @@ public class UnitOfWork : IUnitOfWork
     public IEventRepository Events { get; }
     public ISongRequestRepository SongRequests { get; }
     public IGenreRepository Genres { get; }
+
+    // Music integrations
+    public ISongExternalDataRepository SongExternalData { get; }
+    public ISongLyricsRepository SongLyrics { get; }
+    public IExternalArtistRepository ExternalArtists { get; }
 
     public async Task<int> SaveChangesAsync()
     {

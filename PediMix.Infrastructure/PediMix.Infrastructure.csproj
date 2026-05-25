@@ -12,6 +12,22 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
+
+    <!-- Redis (cache distribuído) -->
+    <PackageReference Include="StackExchange.Redis" Version="2.7.33" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.36" />
+    <!-- Cache em memória — fallback quando Redis não está disponível -->
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.2" />
+
+    <!-- Resiliência HTTP -->
+    <PackageReference Include="Polly" Version="7.2.4" />
+    <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.36" />
+
+    <!-- Logging para os Services -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.1" />
   </ItemGroup>
 
   <PropertyGroup>
