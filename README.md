@@ -196,7 +196,7 @@ A API está configurada para usar Railway MySQL:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=mainline.proxy.rlwy.net;Port=49986;Database=railway;User=root;Password=jYFqsjMdBZJGWfEMrukyftRgcEYazGKq;SslMode=Required;"
+    "DefaultConnection": "Server=SEU_HOST;Port=PORTA;Database=NOME_DB;User=USUARIO;Password=SUA_SENHA"
   }
 }
 ```
