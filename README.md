@@ -290,7 +290,7 @@ O projeto está configurado para usar o **Railway MySQL**. A string de conexão 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=mainline.proxy.rlwy.net;Port=49986;Database=railway;User=root;Password=jYFqsjMdBZJGWfEMrukyftRgcEYazGKq;SslMode=Required;"
+    "DefaultConnection": "Server=SEU_HOST;Port=PORTA;Database=NOME_DB;User=USUARIO;Password=SUA_SENHA"
   }
 }
 ```
@@ -316,7 +316,7 @@ cd database
 
 **Opção 2 - Comando direto:**
 ```bash
-mysql -h mainline.proxy.rlwy.net -u root -p"jYFqsjMdBZJGWfEMrukyftRgcEYazGKq" --port 49986 --protocol=TCP railway < database/seed-data.sql
+mysql -h SEU_HOST -u root -p"SUA_SENHA" --port PORTA --protocol=TCP railway < database/seed-data.sql
 ```
 
 ## 🚀 Como Executar
