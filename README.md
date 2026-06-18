@@ -217,17 +217,7 @@ curl -X POST "http://localhost:5062/api/songrequests" \
 }'
 ```
 
-## 🔧 Configuração Railway
-
-A API está configurada para usar Railway MySQL:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=SEU_HOST;Port=PORTA;Database=NOME_DB;User=USUARIO;Password=SUA_SENHA"
-  }
-}
-```
+---
 
 ## 🏗️ Padrões CQRS
 
