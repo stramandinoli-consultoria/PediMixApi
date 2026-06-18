@@ -26,8 +26,7 @@ COPY --from=build /app/out ./
 EXPOSE 8080
 
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
-# Run the application
-ENTRYPOINT ["dotnet", "PediMix.API.dll"]
+# Run the application binding to Railway dynamic port (fallback 8080)
+ENTRYPOINT ["sh", "-c", "ASPNETCORE_URLS=http://+:${PORT:-8080} dotnet PediMix.API.dll"]
